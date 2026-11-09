@@ -6,18 +6,19 @@ html {
   overflow: hidden; /* Забороняємо прокрутку */
   font-family: "Montserrat", sans-serif;
   color: #333;
-  min-height: 100vh;
 }
 
 .container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* видима висота екрана на телефонах (без панелей браузера) */
   background-color: #fefefe;
 }
 
 header.hero {
-  min-height: 200px;
+  flex-shrink: 0;
+  height: clamp(110px, 24dvh, 200px); /* шапка стискається на низьких екранах */
   position: relative;
   background-image: url("./images/header.png");
   background-size: cover;
@@ -27,7 +28,6 @@ header.hero {
   align-items: center;
   margin-bottom: 0; /* Видаляємо відступ знизу */
   padding-bottom: 0; /* Видаляємо паддінг знизу */
-  max-height: 200px;
 }
 
 header.hero .overlay {
@@ -35,14 +35,13 @@ header.hero .overlay {
   color: #fff;
   text-align: center;
   padding: 10px;
-  margin-bottom: 40px;
-  margin-top: 40px;
+  margin: 0 16px;
   border: 1px solid #fff;
 }
 
 header.hero h1 {
   font-weight: 700;
-  font-size: 28px;
+  font-size: clamp(20px, 3.6dvh, 28px);
   line-height: 1.2;
   margin: 0;
 }
@@ -57,18 +56,21 @@ main {
   flex-direction: column;
   justify-content: flex-start; /* Вирівнювання вгорі */
   align-items: center;
-  margin-top: -60px; /* Відсутність відступу між хедером і основним контентом */
+  flex: 1; /* займає весь вільний простір між шапкою і кнопкою */
+  min-height: 0;
+  justify-content: space-evenly;
+  padding: 0 16px;
 }
 
 .features {
   text-align: center;
-  margin: 20px auto;
+  margin: clamp(6px, 2dvh, 20px) auto;
 }
 
 .features h2 {
-  font-size: 1.6em;
+  font-size: clamp(18px, 3.2dvh, 1.6em);
   color: #000;
-  margin-bottom: 10px;
+  margin: 0 0 clamp(4px, 1dvh, 10px);
 }
 
 .features ul {
@@ -78,8 +80,8 @@ main {
 }
 
 .features ul li {
-  font-size: 1em;
-  margin: 8px 0;
+  font-size: clamp(13px, 2dvh, 16px);
+  margin: clamp(2px, 0.8dvh, 8px) 0;
   color: #555;
 }
 
@@ -90,8 +92,12 @@ main {
 }
 
 .gallery-item img {
-  width: 100px;
-  height: 120px;
+  /* 4 фото завжди влазять по ширині й не забирають забагато висоти */
+  width: min(100px, calc((100vw - 62px) / 4), 12.5dvh);
+  height: auto;
+  aspect-ratio: 5 / 6;
+  object-fit: cover;
+  display: block;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
 }
@@ -102,7 +108,7 @@ main {
 
 .telegram-link {
   text-decoration: none;
-  padding: 15px 90px; /* Збільшуємо розмір кнопки для кращого вигляду */
+  padding: clamp(10px, 1.8dvh, 15px) min(90px, 18vw); /* Збільшуємо розмір кнопки для кращого вигляду */
   background-color: #000000;
   color: #fff;
   font-size: 1.1em;
@@ -120,9 +126,10 @@ main {
 /* -------- */
 
 footer {
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
-  padding-bottom: 40px;
+  padding-bottom: clamp(8px, 3dvh, 40px);
   text-align: center;
 }
 
@@ -155,9 +162,9 @@ footer {
   display: flex;
 }
 
-/* Основний стиль для секції */
+/* Основний стиль для секції (порожня, тому прихована) */
 .under {
-  margin-top: 60px;
+  display: none;
   background-color: #f9f9f9;
   text-align: center;
 }
@@ -226,18 +233,22 @@ footer {
 }
 
 .paragraph {
-  margin-top: 40px;
+  flex-shrink: 0;
+  margin: clamp(8px, 3dvh, 40px) 0 clamp(6px, 1.5dvh, 16px);
   text-align: center;
 }
 
-/* Юридичний блок: дисклеймер, політика конфіденційності */
+/* Юридичний блок: компактний рядок, притиснутий до низу екрана */
 .legal {
-  max-width: 800px;
-  margin: 40px auto 24px;
-  padding: 0 16px;
-  font-size: 13px;
-  color: #777;
+  flex-shrink: 0;
+  padding: 6px 16px max(6px, env(safe-area-inset-bottom));
+  font-size: 11px;
+  color: #999;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 12px;
 }
 
 .privacy-link {
@@ -267,7 +278,13 @@ footer {
 }
 
 .copyright {
-  margin-top: 20px;
-  font-size: 12px;
   color: #999;
+}
+
+/* Окрема сторінка політики (поки без посилання) */
+.privacy-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  font-size: 14px;
 }
